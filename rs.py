@@ -3,6 +3,18 @@
 from __future__ import print_function
 import re, sys
 
+# XXX: this sucks
+import sre_parse
+orig_expand_template = sre_parse.expand_template
+def wrap_expand_template(template, match):
+    class MatchWrapper(object):
+        def __init__(self):
+            self.string = match.string
+        def group(self, n):
+            return match.group(n) or self.string[:0]
+    return orig_expand_template(template, MatchWrapper())
+sre_parse.orig_expand_template = wrap_expand_template
+
 def get_delim(cmd, delim):
     esc = False
     for i, c in enumerate(cmd):
