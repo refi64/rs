@@ -13,27 +13,42 @@ def wrap_expand_template(template, match):
         def group(self, n):
             return match.group(n) or self.string[:0]
     return orig_expand_template(template, MatchWrapper())
-sre_parse.orig_expand_template = wrap_expand_template
+sre_parse.expand_template = wrap_expand_template
 
 def get_delim(cmd, delim):
     esc = False
+    conv = False
+    flags = 0
+    if cmd.startswith('+'):
+        cmd = cmd[1:]
+        conv = True
+    if cmd.startswith('*'):
+        cmd = cmd[1:]
+        flags = re.IGNORE
     for i, c in enumerate(cmd):
         if esc: esc = True
         elif c == '\\': esc = False
         elif cmd.startswith(delim, i):
-            return cmd[:i], cmd[i+len(delim):]
-    return '^', cmd
+            return cmd[:i], cmd[i+len(delim):], conv, flags
+    return '^', cmd, conv, flags
 
 def run(delim, cmds):
     patterns = []
     for cmd in cmds:
-        pat, repl = get_delim(cmd, delim) or 0
-        patterns.append((re.compile(pat), repl))
+        pat, repl, conv, flags = get_delim(cmd, delim)
+        patterns.append((re.compile(pat, flags), repl, conv))
 
     for line in sys.stdin:
         line = line.rstrip('\n')
-        for find, replace in patterns:
-            line = find.sub(replace, line)
+        for find, replace, conv in patterns:
+            if conv:
+                orig = line
+                while True:
+                    line = find.sub(replace, line)
+                    if line == orig: break
+                    orig = line
+            else:
+                line = find.sub(replace, line)
         print(line)
 
 def usage():
