@@ -54,7 +54,8 @@ def run(delim, cmds, debug):
             repl = string.Template(repl).safe_substitute(macros)
             if debug:
                 print('substituting macros into pattern resulted in %s' % pat)
-                print('substituting macros into replacement resulted in %s' % repl)
+                print('substituting macros into replacement resulted in %s' %
+                      repl)
             patterns.append((re.compile(pat, flags), repl, conv))
 
     if debug: print('processing input!')
@@ -71,13 +72,15 @@ def run(delim, cmds, debug):
                     line = find.sub(replace, line)
                     if line == orig: break
                     if debug:
-                        print('converged %s to %s' % (orig.encode('string-escape'),
-                                                      line.encode('string-escape')))
+                        print('converged %s to %s' % (
+                                orig.encode('string-escape'),
+                                line.encode('string-escape')))
                     orig = line
             else:
                 line = find.sub(replace, line)
             if debug:
-                print('result of application is %s' % line.encode('string-escape'))
+                print('result of application is %s' %
+                        line.encode('string-escape'))
             while True:
                 m = rep.search(line)
                 if m is None:
