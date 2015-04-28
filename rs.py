@@ -104,7 +104,7 @@ def run(delim, cmds, debug):
         print(line)
 
 def usage():
-    print('usage: %s [-hfg] <script/file>' % sys.argv[0], file=sys.stderr)
+    print('usage: %s [-h] [-g] [-f] <script/file>' % sys.argv[0], file=sys.stderr)
 
 def main():
     if '-h' in sys.argv:
