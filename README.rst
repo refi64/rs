@@ -44,8 +44,16 @@ Prefixing a pattern with a ``+`` is the convergence operator; I got the feature 
 
 Prefixing a pattern with ``*`` makes the pattern case-insensitive.
 
-If you have ``(a)^^(b)``, where ``a`` is some string and ``b`` is an integer, rs will repeat ``a`` ``b`` times. Example:
+If you have ``(a)^^(b)``, where ``a`` is some string and ``b`` is an integer, rs will repeat ``a`` ``b`` times. Example::
 
     (\d)(.)/(\2)^^(\1)
 
 This will replace ``2Z`` with ``ZZ``, ``3#`` with ``###``, ``9%`` with ``%%%%%%%%%``, etc.
+
+Any lines beginning with a double dollar sign (``$$``) will be assumed to be macro definitions. You can define a macro and use it later on in your script via the dollar sign. Example::
+
+    $$a=1
+    $$b=2
+    $a/$b
+
+will replace a ``1`` with a ``2``.

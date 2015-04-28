@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from __future__ import print_function
-import re, sys
+import re, string, sys
 
 # XXX: this sucks
 import sre_parse
@@ -34,10 +34,20 @@ def get_delim(cmd, delim):
 
 def run(delim, cmds):
     patterns = []
+    macros = {}
     rep = re.compile(r'(\([^\)]+\))\^\^(\([^\)]+\))')
     for cmd in cmds:
-        pat, repl, conv, flags = get_delim(cmd, delim)
-        patterns.append((re.compile(pat, flags), repl, conv))
+        if cmd.startswith('$$'):
+            try:
+                i = cmd.index('=')
+            except:
+                sys.exit('invalid macro definition: ' + cmd)
+            macros[cmd[2:i]] = cmd[i+1:]
+        else:
+            pat, repl, conv, flags = get_delim(cmd, delim)
+            pat = string.Template(pat).safe_substitute(macros)
+            repl = string.Template(repl).safe_substitute(macros)
+            patterns.append((re.compile(pat, flags), repl, conv))
 
     for line in sys.stdin:
         line = line.rstrip('\n').replace('^^', '^\^')
