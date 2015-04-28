@@ -29,6 +29,8 @@ You can pass ``-f`` to load a file instead::
 
 rs scripts end in ``.rsp``.
 
+Lines in a script beginning with `\#` are comments and are ignored.
+
 If the delimiter is not preset in the script, the pattern will assumed to be ``^``, and the replacement will be the script::
 
    echo -e 'a\nb' | rs.py 'xyz'

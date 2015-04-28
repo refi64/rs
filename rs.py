@@ -88,7 +88,10 @@ def main():
         cmds = []
         for fn in files:
             with open(fn, 'r') as f:
-                cmds.extend(f.read().splitlines())
+                for line in f:
+                    line = line.rstrip('\n')
+                    if not line or line.startswith('\\#'): continue
+                    cmds.append(line)
     run(delim, cmds)
 
 if __name__ == '__main__':
