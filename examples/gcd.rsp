@@ -1,0 +1,8 @@
+\# based on http://codegolf.stackexchange.com/a/48479/21009
+
+\# first we expand the input numbers
+(\d+) (\d+)/(1)^^(\1) (1)^^(\2)
+\# then we compute the GCD
+^(.+)\1* \1+$/\1
+\# and turn it into an integer
+(\d+)/(^^\1)
