@@ -34,12 +34,13 @@ def get_delim(cmd, delim):
 
 def run(delim, cmds):
     patterns = []
+    rep = re.compile(r'(\([^\)]+\))\^\^(\([^\)]+\))')
     for cmd in cmds:
         pat, repl, conv, flags = get_delim(cmd, delim)
         patterns.append((re.compile(pat, flags), repl, conv))
 
     for line in sys.stdin:
-        line = line.rstrip('\n')
+        line = line.rstrip('\n').replace('^^', '^\^')
         for find, replace, conv in patterns:
             if conv:
                 orig = line
@@ -49,6 +50,13 @@ def run(delim, cmds):
                     orig = line
             else:
                 line = find.sub(replace, line)
+            while True:
+                m = rep.search(line)
+                if m is None: break
+                l, r = m.group(1), m.group(2)
+                if l.startswith('(') and l.endswith(')'):
+                    l = l[1:-1]
+                line = line[:m.start()] + l*int(r[1:-1]) + line[m.end():]
         print(line)
 
 def usage():
