@@ -1,7 +1,19 @@
 rs
 ==
 
-A little sed-like text replacement tool with full Perl regexes.
+rs is a project I created for two purposes:
+
+- An alternative to sed that's easier to use for simple tasks
+- Code golf
+
+The result? A tool with lots of operators and a few fun ways of doing things. Regexes were never this cool. Ever.
+
+Installation
+************
+
+::
+   
+   python setup.py install
 
 Basics
 ******
@@ -80,3 +92,8 @@ Any lines beginning with a double dollar sign (``$$``) will be assumed to be mac
     $a/$b
 
 will replace a ``1`` with a ``2``.
+
+TODO
+****
+
+- States. Something so that I can create a state using ``$^x`` and jump to it if a pattern matches.
