@@ -32,45 +32,68 @@ def get_delim(cmd, delim):
             return cmd[:i], cmd[i+len(delim):], conv, flags
     return '^', cmd, conv, flags
 
-def run(delim, cmds):
+def run(delim, cmds, debug):
     patterns = []
     macros = {}
     rep = re.compile(r'(\([^\)]+\))\^\^(\([^\)]+\))')
     for cmd in cmds:
+        if debug: print('reading command %s' % cmd)
         if cmd.startswith('$$'):
             try:
                 i = cmd.index('=')
             except:
                 sys.exit('invalid macro definition: ' + cmd)
+            if debug: print("setting macro '%s' to '%s'" % (cmd[2:i], cmd[i+1:]))
             macros[cmd[2:i]] = cmd[i+1:]
         else:
             pat, repl, conv, flags = get_delim(cmd, delim)
+            if debug:
+                print('got pattern %s' % pat)
+                print('got replacement %s' % repl)
             pat = string.Template(pat).safe_substitute(macros)
             repl = string.Template(repl).safe_substitute(macros)
+            if debug:
+                print('substituting macros into pattern resulted in %s' % pat)
+                print('substituting macros into replacement resulted in %s' % repl)
             patterns.append((re.compile(pat, flags), repl, conv))
+
+    if debug: print('processing input!')
 
     for line in sys.stdin:
         line = line.rstrip('\n').replace('^^', '^\^')
+        if debug: print('current line: %s' % line)
         for find, replace, conv in patterns:
+            if debug: print('applying pattern %s with replacement %s' % (
+                                                        find.pattern, repl))
             if conv:
                 orig = line
                 while True:
                     line = find.sub(replace, line)
                     if line == orig: break
+                    if debug:
+                        print('converged %s to %s' % (orig.encode('string-escape'),
+                                                      line.encode('string-escape')))
                     orig = line
             else:
                 line = find.sub(replace, line)
+            if debug:
+                print('result of application is %s' % line.encode('string-escape'))
             while True:
                 m = rep.search(line)
-                if m is None: break
+                if m is None:
+                    if debug: print('no more repititions to expand')
+                    break
                 l, r = m.group(1), m.group(2)
+                if debug: print('found repition %s^^%s' % (l, r))
                 if l.startswith('(') and l.endswith(')'):
                     l = l[1:-1]
                 line = line[:m.start()] + l*int(r[1:-1]) + line[m.end():]
+                if debug: print('result with repitition expanded: %s' %
+                                                line.encode('string-escape'))
         print(line)
 
 def usage():
-    print('usage: %s [-h] [-f] <script/file>' % sys.argv[0], file=sys.stderr)
+    print('usage: %s [-hfg] <script/file>' % sys.argv[0], file=sys.stderr)
 
 def main():
     if '-h' in sys.argv:
@@ -79,6 +102,7 @@ def main():
     use_file = False
     cmds = []
     delim = '/'
+    debug = False
     for arg in sys.argv[1:]:
         if arg == '-f':
             if use_file:
@@ -87,6 +111,8 @@ def main():
             use_file = True
         elif arg.startswith('-d'):
             delim = arg[2:]
+        elif arg == '-g':
+            debug = True
         else:
             cmds.append(arg)
     if not cmds:
@@ -102,7 +128,7 @@ def main():
                     line = line.rstrip('\n')
                     if not line or line.startswith('\\#'): continue
                     cmds.append(line)
-    run(delim, cmds)
+    run(delim, cmds, debug)
 
 if __name__ == '__main__':
     main()

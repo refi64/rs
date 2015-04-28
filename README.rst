@@ -31,6 +31,8 @@ If the delimiter is not preset in the script, the pattern will assumed to be ``^
 
 This can be used to prepend whitespace to a file (useful with Stack Overflow submissions or embedding a file in an rST document).
 
+Passing ``-g`` will cause rs to print lots and lots of debugging info while reading patterns and expanding the input.
+
 File scripts
 ************
 
