@@ -36,6 +36,7 @@ def run(delim, cmds, debug):
     patterns = []
     macros = {}
     rep = re.compile(r'(\([^\)]+\))\^\^(\([^\)]+\))')
+    ln = re.compile(r'\(\^\^([^\)]+)\)')
     for cmd in cmds:
         if debug: print('reading command %s' % cmd)
         if cmd.startswith('$$'):
@@ -88,11 +89,18 @@ def run(delim, cmds, debug):
                     break
                 l, r = m.group(1), m.group(2)
                 if debug: print('found repition %s^^%s' % (l, r))
-                if l.startswith('(') and l.endswith(')'):
-                    l = l[1:-1]
+                l = l[1:-1]
                 line = line[:m.start()] + l*int(r[1:-1]) + line[m.end():]
                 if debug: print('result with repitition expanded: %s' %
                                                 line.encode('string-escape'))
+            while True:
+                m = ln.search(line)
+                if m is None:
+                    if debug: print('nothing more to get length of')
+                    break
+                line = line[:m.start()] + str(len(m.group(1))) + line[m.end():]
+                if debug: print('result with length expanded: %s' %
+                                    line.encode('string-escape'))
         print(line)
 
 def usage():

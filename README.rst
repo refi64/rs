@@ -61,6 +61,15 @@ If you have ``(a)^^(b)``, where ``a`` is some string and ``b`` is an integer, rs
 
 This will replace ``2Z`` with ``ZZ``, ``3#`` with ``###``, ``9%`` with ``%%%%%%%%%``, etc.
 
+Length
+******
+
+rs will expand ``(^^a)`` to be the length of ``a``. For instance::
+
+    (\d+)/(^^\1)
+
+will replace ``xx`` with ``2``, ``12323`` with ``5``, and so forth.
+
 Macros
 ******
 
