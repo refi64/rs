@@ -15,6 +15,9 @@ def wrap_expand_template(template, match):
     return orig_expand_template(template, MatchWrapper())
 sre_parse.expand_template = wrap_expand_template
 
+rep = re.compile(r'(\([^\(\)]+\))\^\^(\([^\)]+\))')
+ln = re.compile(r'\(\^\^([^\(\)]+)\)')
+
 def get_delim(cmd, delim):
     esc = False
     conv = False
@@ -32,11 +35,31 @@ def get_delim(cmd, delim):
             return cmd[:i], cmd[i+len(delim):], conv, flags
     return '^', cmd, conv, flags
 
+def expand(debug, line):
+    while True:
+        m = ln.search(line)
+        if m is None:
+            if debug: print('nothing more to get length of')
+            break
+        line = line[:m.start()] + str(len(m.group(1))) + line[m.end():]
+        if debug: print('result with length expanded: %s' %
+                         line.encode('string-escape'))
+    while True:
+        m = rep.search(line)
+        if m is None:
+            if debug: print('no more repititions to expand')
+            break
+        l, r = m.group(1), m.group(2)
+        if debug: print('found repition %s^^%s' % (l, r))
+        l = l[1:-1]
+        line = line[:m.start()] + l*int(r[1:-1]) + line[m.end():]
+        if debug: print('result with repitition expanded: %s' %
+                         line.encode('string-escape'))
+    return line
+
 def run(delim, cmds, debug):
     patterns = []
     macros = {}
-    rep = re.compile(r'(\([^\)]+\))\^\^(\([^\)]+\))')
-    ln = re.compile(r'\(\^\^([^\)]+)\)')
     for cmd in cmds:
         if debug: print('reading command %s' % cmd)
         if cmd.startswith('$$'):
@@ -70,7 +93,7 @@ def run(delim, cmds, debug):
             if conv:
                 orig = line
                 while True:
-                    line = find.sub(replace, line)
+                    line = expand(debug, find.sub(replace, line))
                     if line == orig: break
                     if debug:
                         print('converged %s to %s' % (
@@ -78,29 +101,10 @@ def run(delim, cmds, debug):
                                 line.encode('string-escape')))
                     orig = line
             else:
-                line = find.sub(replace, line)
+                line = expand(debug, find.sub(replace, line))
             if debug:
                 print('result of application is %s' %
                         line.encode('string-escape'))
-            while True:
-                m = rep.search(line)
-                if m is None:
-                    if debug: print('no more repititions to expand')
-                    break
-                l, r = m.group(1), m.group(2)
-                if debug: print('found repition %s^^%s' % (l, r))
-                l = l[1:-1]
-                line = line[:m.start()] + l*int(r[1:-1]) + line[m.end():]
-                if debug: print('result with repitition expanded: %s' %
-                                                line.encode('string-escape'))
-            while True:
-                m = ln.search(line)
-                if m is None:
-                    if debug: print('nothing more to get length of')
-                    break
-                line = line[:m.start()] + str(len(m.group(1))) + line[m.end():]
-                if debug: print('result with length expanded: %s' %
-                                    line.encode('string-escape'))
         print(line)
 
 def usage():
