@@ -1,0 +1,25 @@
+\# expand the input numbers (1 to _, 2 to __, 3 to ___, 5 to _____, etc.)
+(\d+)/(_)^^(\1)
+
+\# setup the arena
+\# duplicates the series of underscores but removes the first underscore in the second copy
+\# for instance, _____ would become _____ ____ (5 underscores followed by 4)
+_(_+)/_\1 \1
+
+\# this is the magic part
+\# we repeat the first set of underscores the length of the second times
+\# and repeat until we end up multiplying by 1
+\# the 5 underscores would go from:
+\# _____ ____
+\# to
+\# ____________________ ___ (5*4 = 20 underscores)
+\# to
+\# ____________________________________________________________ __ (20*3 = 60 underscores)
+\# to ________________________________________________________________________________________________________________________ _ (60*2 = 120 underscores)
++_(_+) _(_+)$/(_\1)^^((^^_\2)) \2
+
+\# now we remove the trailing underscore and space
+ _$/
+ 
+\# and convert back into a number
+(_+)/(^^\1) 
