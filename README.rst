@@ -20,7 +20,7 @@ Basics
 
 ::
 
-   rs.py [-h] [-f] [-d<delim>] <script or file>
+   rs.py [-h] [-g] [-f] [-d<delim>] <script or file>
 
 Here's an example usage::
 
@@ -60,7 +60,7 @@ Lines in a script beginning with `\#` are comments and are ignored.
 Operators
 *********
 
-Prefixing a pattern with a ``+`` is the convergence operator; I got the feature from the excellent [Retina](https://github.com/mbuettner/retina#retina-is-turing-complete). The convergence operator continuously loops and replaces the pattern until no more substitutions are possible.
+Prefixing a pattern with a ``+`` is the convergence operator; I got the feature from the excellent `Retina <https://github.com/mbuettner/retina#retina-is-turing-complete>`_. The convergence operator continuously loops and replaces the pattern until no more substitutions are possible.
 
 Prefixing a pattern with ``*`` makes the pattern case-insensitive.
 
