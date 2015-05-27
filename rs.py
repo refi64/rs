@@ -85,11 +85,11 @@ def run(delim, cmds, debug):
     if debug: print('processing input!')
 
     for line in sys.stdin:
-        line = line.rstrip('\n').replace('^^', '^\^')
+        line = line.rstrip('\n').replace('^^', r'^\^')
         if debug: print('current line: %s' % line)
         for find, replace, conv in patterns:
             if debug: print('applying pattern %s with replacement %s' % (
-                                                        find.pattern, repl))
+                                                        find.pattern, replace))
             if conv:
                 orig = line
                 while True:
@@ -105,7 +105,7 @@ def run(delim, cmds, debug):
             if debug:
                 print('result of application is %s' %
                         line.encode('string-escape'))
-        print(line)
+        print(line.replace(r'^\^', '^^'))
 
 def usage():
     print('usage: %s [-h] [-g] [-f] <script/file>' % sys.argv[0], file=sys.stderr)
