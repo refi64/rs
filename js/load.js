@@ -13,6 +13,16 @@ run_code = (function() {
     var out = document.getElementById('output');
     window.vm = new PyPyJS();
     vm.stdout = vm.stderr = function(data) { output.innerHTML += escape(data); }
+    status.innerHTML = 'Loading PyPy.js (this might take a while)...'
+    vm.ready.then(function() {
+        status.innerHTML = 'Loading rs...';
+        rs_req.open('GET', rsu, true);
+        rs_req.setRequestHeader('Accept', 'application/vnd.github.v3.raw+json');
+        rs_req.send();
+    }).then(null, function(err) {
+        status.innerHTML = 'ERROR loading PyPy.js: ' + err;
+        status.style.color = 'red';
+    })
 
     var url_query = window.location.href.split('?')[1];
     if (url_query !== undefined) {
@@ -44,17 +54,6 @@ run_code = (function() {
             rs = rs.replace('from __future__ import print_function', '')
         }
     });
-
-    status.innerHTML = 'Loading PyPy.js (this might take a while)...'
-    vm.ready.then(function() {
-        status.innerHTML = 'Loading rs...';
-        rs_req.open('GET', rsu, true);
-        rs_req.setRequestHeader('Accept', 'application/vnd.github.v3.raw+json');
-        rs_req.send();
-    }).then(null, function(err) {
-        status.innerHTML = 'ERROR loading PyPy.js: ' + err;
-        status.style.color = 'red';
-    })
 
     function on_error(err) {
         output.innerHTML = escape(err.trace);
