@@ -1,7 +1,12 @@
 #!/usr/bin/env python
 
 from __future__ import print_function
-import re, string, sys
+import re, sys
+
+try:
+    import string
+except ImportError:
+    string = None
 
 # XXX: this sucks
 import sre_parse
@@ -63,6 +68,8 @@ def run(delim, cmds, debug):
     for cmd in cmds:
         if debug: print('reading command %s' % cmd)
         if cmd.startswith('$$'):
+            if string is None:
+                sys.exit('macros can only be used if there is a string module')
             try:
                 i = cmd.index('=')
             except:
@@ -74,8 +81,9 @@ def run(delim, cmds, debug):
             if debug:
                 print('got pattern %s' % pat)
                 print('got replacement %s' % repl)
-            pat = string.Template(pat).safe_substitute(macros)
-            repl = string.Template(repl).safe_substitute(macros)
+            if string is not None:
+                pat = string.Template(pat).safe_substitute(macros)
+                repl = string.Template(repl).safe_substitute(macros)
             if debug:
                 print('substituting macros into pattern resulted in %s' % pat)
                 print('substituting macros into replacement resulted in %s' %
