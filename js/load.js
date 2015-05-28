@@ -56,7 +56,7 @@ run_code = (function() {
     });
 
     function on_error(err) {
-        output.innerHTML = escape(err.trace);
+        output.innerHTML += escape(err.trace);
         output.style.color = 'red';
     }
 
