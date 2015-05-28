@@ -1,0 +1,33 @@
+<html>
+  <head>
+    <title>rs</title>
+    <!-- PyPy.js is already big enough; we don't want Bootstrap, too -->
+    <link href="css/style.css" type="text/css" rel="stylesheet"/>
+  </head>
+  <body>
+    <div id="tdiv">
+      <h1><a href="https://github.com/kirbyfan64/rs">rs</a> demo page</h1>
+      <br/>
+      <em>(Work-in-progress, if you can't tell by the "Run it!" button being
+          too far to the right)</em>
+      <br/>
+      <br/>
+      <br/>
+      <div id="status"></div>
+    </div>
+    <div id="bdiv">
+      <textarea id="rs_script" placeholder="Enter your rs script here"></textarea>
+      <span id="output">Output will be here</span>
+      <textarea id="input" placeholder="Input text here"></textarea>
+      <input type="checkbox" id="debug">Debug?</input>
+      <br/>
+      <br/>
+      <button id="run" onclick="run_code()">Run it!</button>
+      <button id="link" onclick="make_link()">Link it!</button>
+    </div>
+    <script src="js/pypy.js/lib/Promise.min.js" charset="utf-8"></script>
+    <script src="js/pypy.js/lib/FunctionPromise.js" charset="utf-8"></script>
+    <script src="js/pypy.js/lib/pypy.js" charset="utf-8"></script>
+    <script src="js/load.js"></script>
+  </body>
+</html>

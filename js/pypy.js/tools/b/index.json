@@ -1,0 +1,15 @@
+{
+  "modules": {
+    "string": {
+      "file": "string.py", 
+      "imports": [
+        "re", 
+        "strop.lowercase", 
+        "strop.maketrans", 
+        "strop.uppercase", 
+        "strop.whitespace"
+      ]
+    }
+  }, 
+  "preload": {}
+}

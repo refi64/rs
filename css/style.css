@@ -1,0 +1,63 @@
+/* generic */
+
+body { font-family: Arial, Verdana, sans-serif; }
+a { text-decoration: none; }
+a:visited { color: blue; }
+
+/* header styles */
+
+h1 { display: inline; }
+
+#tdiv {
+    padding-bottom: 2em;
+    margin-left: 1em;
+}
+
+/* body styles */
+
+textarea {
+    padding: 1em;
+    border-radius: 10px;
+    float: left;
+    width: 40%;
+    height: 23em;
+}
+
+textarea:focus { outline: 0; }
+
+#input {
+    position: absolute;
+    display: block;
+    margin-top: 25em;
+    float: left;
+}
+
+button {
+    /*position: absolute;*/
+    margin-top: 25em;
+    background: mediumblue;
+    border-radius: 10px;
+    border: 0;
+    color: white;
+    height: 3em;
+    width: 5em;
+}
+
+button:hover { background: royalblue; }
+button:active { background: skyblue; }
+button:focus { outline: 0; }
+
+#output {
+    padding: 1em;
+    margin-left: 1em;
+    border: 1px solid black;
+    border-radius: 10px;
+    background-color: whitesmoke;
+    float: left;
+    width: 40%;
+    height: 17em;
+    font-family: "Lucida Console", monospace;
+    overflow: auto;
+}
+
+#bdiv { padding: 1em; }
