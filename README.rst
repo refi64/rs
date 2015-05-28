@@ -8,6 +8,8 @@ rs is a project I created for two purposes:
 
 The result? A tool with lots of operators and a few fun ways of doing things. Regexes were never this cool. Ever.
 
+`Try it! <http://kirbyfan64.github.io/rs>`_
+
 Installation
 ************
 
