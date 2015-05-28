@@ -15,18 +15,20 @@ run_code = (function() {
     vm.stdout = vm.stderr = function(data) { output.innerHTML += escape(data); }
 
     var url_query = window.location.href.split('?')[1];
-    if (url_query[url_query.length-1] === '/')
-        url_query = url_query.substr(0, url_query.length-1);
-    var query_args = url_query.split('&');
-    for (var i=0; i<query_args.length; i++) {
-        var sides = query_args[i].split('=');
-        switch (sides[0]) {
-        case 'script':
-            document.getElementById('rs_script').value = decodeURIComponent(sides[1]);
-            break;
-        case 'input':
-            document.getElementById('input').value = decodeURIComponent(sides[1]);
-            break;
+    if (url_query !== undefined) {
+        if (url_query[url_query.length-1] === '/')
+            url_query = url_query.substr(0, url_query.length-1);
+        var query_args = url_query.split('&');
+        for (var i=0; i<query_args.length; i++) {
+            var sides = query_args[i].split('=');
+            switch (sides[0]) {
+            case 'script':
+                document.getElementById('rs_script').value = decodeURIComponent(sides[1]);
+                break;
+            case 'input':
+                document.getElementById('input').value = decodeURIComponent(sides[1]);
+                break;
+            }
         }
     }
 
