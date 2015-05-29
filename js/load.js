@@ -51,17 +51,22 @@ run_code = (function() {
         if (rs === undefined) status.innerHTML = 'ERROR loading rs!';
         else {
             status.innerHTML = '';
-            rs = rs.replace('from __future__ import print_function', '')
+            rs = rs.replace('from __future__ import print_function', '');
+            vm.exec('from __future__ import print_function\n__name__=None\n' + rs);
         }
     });
 
     function on_error(err) {
-        output.innerHTML += escape(err.trace);
+        if (err.trace !== undefined)
+            output.innerHTML += escape(err.trace);
+        else
+            output.innerHTML += 'INTERNAL ERROR: ' + err.toString();
         output.style.color = 'red';
+        if (err.trace === undefined) throw err;
     }
 
     function py_escape(txt) {
-        return txt.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\n/g, '\\n');
+        return txt.replace(/'/g, "\\'").replace(/\n/g, '\\n');
     }
 
     function run_code() {
@@ -69,13 +74,13 @@ run_code = (function() {
         var lines = [];
         output.style.color = 'black';
         output.innerHTML = '';
-        lines = py_escape(document.getElementById('rs_script').value).split(/[\\n]+/g);
+        lines = py_escape(document.getElementById('rs_script').value).split(/(?:\\n)+/g);
         if (document.getElementById('debug').checked)
             largs += "'-g', ";
         for (var i=0; i<lines.length; i++) if (lines[i] != '')
-            largs += "'" + lines[i] + "', ";
+            largs += "r'" + lines[i] + "', ";
         function on_stdin_ready() {
-            vm.exec("from __future__ import print_function; import sys; sys.argv = ['rs.py', " + largs + "]\n" + rs + '\nelse: main()').then(null, on_error);
+            vm.exec("from __future__ import print_function; import sys; sys.argv = ['rs.py', " + largs + "]\nmain()").then(null, on_error);
         }
         vm.exec("import sys, cStringIO; sys.stdin = cStringIO.StringIO('" + py_escape(document.getElementById('input').value) + "\\n')").then(on_stdin_ready).then(null, on_error);
     }
