@@ -742,7 +742,7 @@ PyPyJS.prototype.findImportedNames = function findImportedNames(code) {
     } else {
       relmod = "";
     }
-    var submods = match[0].split("import")[1];
+    var submods = match[0].split("import")[1].split('\n')[0];
     while (submods && /[\s(]/.test(submods.charAt(0))) {
       submods = submods.substr(1);
     }
