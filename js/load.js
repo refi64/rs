@@ -1,3 +1,5 @@
+// XXX: I need to add more line breaks!
+
 run_code = (function() {
     var tags = {
         '&': '&amp;',
@@ -82,7 +84,7 @@ run_code = (function() {
         function on_stdin_ready() {
             vm.exec("from __future__ import print_function; import sys; sys.argv = ['rs.py', " + largs + "]\nmain()").then(null, on_error);
         }
-        vm.exec("import sys, cStringIO; sys.stdin = cStringIO.StringIO('" + py_escape(document.getElementById('input').value) + "\\n')").then(on_stdin_ready).then(null, on_error);
+        vm.exec("import sys, cStringIO; sys.stdin = cStringIO.StringIO('" + py_escape(document.getElementById('input').value).replace(/^\\n+|\\n+$/g, '') + "\\n')").then(on_stdin_ready).then(null, on_error);
     }
 
     return run_code;
