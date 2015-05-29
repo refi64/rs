@@ -1,12 +1,7 @@
 #!/usr/bin/env python
 
 from __future__ import print_function
-import re, sys
-
-try:
-    import string
-except ImportError:
-    string = None
+import re, string, sys
 
 # XXX: this sucks
 import sre_parse
