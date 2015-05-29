@@ -58,6 +58,7 @@ button:focus { outline: 0; }
     height: 17em;
     font-family: "Lucida Console", monospace;
     overflow: auto;
+    white-space: nowrap;
 }
 
 #bdiv { padding: 1em; }
