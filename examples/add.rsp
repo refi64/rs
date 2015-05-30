@@ -1,0 +1,7 @@
+\# Adds two space-delimited numbers
+\# Basically, it first expands the numbers into underscores and places them
+\# side-by-side.
+\# 5 4 would turn into _________ (9) underscores.
+\# Then it just uses the length operator to convert the underscores into a number.
+(\d+) (\d+)/(_)^^(\1)(_)^^(\2)
+(_+)/(^^\1)

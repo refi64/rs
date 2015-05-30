@@ -1,0 +1,23 @@
+\# Subtracts two space-delimited numbers.
+\# This does NOT work with negative numbers.
+\# First, expand them into underscores (as always).
+(\d+) (\d+)/(_)^^(\1) (_)^^(\2)
+\# First case: the numbers are equal.
+\# The result must be zero.
+\# We can get rid of the underscores now to prevent the rest of the cases from
+\# matching.
+^(_+) \1$/@0
+\# Second case: the first number is larger than the second.
+\# If we are subtracting 5 and 4, then the underscore form would be
+\# _____ ____.
+\# Therefore, the first set does *not* fit into the second.
+\# We can swap the two underscore sets if the first doesn't fit into the second.
+\# We also prepend an @ to signify that the resulting number will be positive.
+^(_+) (?!\1)(_+)/@\2 \1
+\# When we get here, the smaller will be before the larger.
+\# We can now find the difference between the two.
+(_+) \1(_+)/(^^\2)
+\# Now, if there is no @ in the beginning, the result must be negative.
+^(?!@)/-
+\# Lastly, we remove the leading @, if it was there.
+@/
