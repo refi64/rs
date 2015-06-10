@@ -7,7 +7,7 @@ run_code = (function() {
         '>': '&gt;'
     };
     function escape(txt) {
-        return txt.replace(/[&<>]/g, function(tag) { return tags[tag] || tag; }).replace(/\\n/g, '<br/>').replace(/\n/g, '<br/>');
+        return txt.replace(/[&<>]/g, function(tag) { return tags[tag] || tag; }).replace(/\n/g, '<br/>').replace(/ /g, '&nbsp;');
     }
 
     var rsu = 'https://api.github.com/repos/kirbyfan64/rs/contents/rs.py';
@@ -76,11 +76,11 @@ run_code = (function() {
         var lines = [];
         output.style.color = 'black';
         output.innerHTML = '';
-        lines = py_escape(document.getElementById('rs_script').value).split(/(?:\\n)+/g);
+        lines = document.getElementById('rs_script').value.split(/(?:\n)+/g);
         if (document.getElementById('debug').checked)
             largs += "'-g', ";
         for (var i=0; i<lines.length; i++) if (lines[i] != '')
-            largs += "r'" + lines[i] + "', ";
+            largs += "r'" + py_escape(lines[i]) + "', ";
         function on_stdin_ready() {
             vm.exec("from __future__ import print_function; import sys; sys.argv = ['rs.py', " + largs + "]\nmain()").then(null, on_error);
         }
