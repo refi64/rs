@@ -92,5 +92,6 @@ run_code = (function() {
 
 function make_link() {
     var out = document.getElementById('output');
+    out.style.color = 'black';
     out.innerHTML = 'http://kirbyfan64.github.io/rs/index.html?script=' + encodeURIComponent(document.getElementById('rs_script').value) + '&input=' + encodeURIComponent(document.getElementById('input').value);
 }
