@@ -27,7 +27,7 @@ def get_delim(cmd, delim):
         conv = True
     if cmd.startswith('*'):
         cmd = cmd[1:]
-        flags = re.IGNORE
+        flags = re.IGNORECASE
     for i, c in enumerate(cmd):
         if esc: esc = True
         elif c == '\\': esc = False
