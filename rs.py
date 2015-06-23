@@ -29,8 +29,8 @@ def get_delim(cmd, delim):
         cmd = cmd[1:]
         flags = re.IGNORECASE
     for i, c in enumerate(cmd):
-        if esc: esc = True
-        elif c == '\\': esc = False
+        if esc: esc = False
+        elif c == '\\': esc = True
         elif cmd.startswith(delim, i):
             return cmd[:i], cmd[i+len(delim):], conv, flags
     return '^', cmd, conv, flags
