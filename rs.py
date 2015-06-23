@@ -15,8 +15,8 @@ def wrap_expand_template(template, match):
     return orig_expand_template(template, MatchWrapper())
 sre_parse.expand_template = wrap_expand_template
 
-rep = re.compile(r'(\([^\(\)]+\))\^\^(\([^\)]+\))')
-ln = re.compile(r'\(\^\^([^\(\)]+)\)')
+rep = re.compile(r'(\([^\(\)]+\))\^\^(\([^\)]*\))')
+ln = re.compile(r'\(\^\^([^\(\)]*)\)')
 
 def get_delim(cmd, delim):
     esc = False
