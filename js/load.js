@@ -35,7 +35,7 @@ run_code = (function() {
             var sides = query_args[i].split('=');
             switch (sides[0]) {
             case 'script':
-                document.getElementById('rs_script').value = decodeURIComponent(sides[1]);
+                document.getElementById('script').value = decodeURIComponent(sides[1]);
                 break;
             case 'input':
                 document.getElementById('input').value = decodeURIComponent(sides[1]);
@@ -76,7 +76,7 @@ run_code = (function() {
         var lines = [];
         output.style.color = 'black';
         output.innerHTML = '';
-        lines = document.getElementById('rs_script').value.split(/(?:\n)+/g);
+        lines = document.getElementById('script').value.split(/(?:\n)+/g);
         if (document.getElementById('debug').checked)
             largs += "'-g', ";
         for (var i=0; i<lines.length; i++) if (lines[i] != '')
@@ -93,5 +93,5 @@ run_code = (function() {
 function make_link() {
     var out = document.getElementById('output');
     out.style.color = 'black';
-    out.innerHTML = 'http://kirbyfan64.github.io/rs/index.html?script=' + encodeURIComponent(document.getElementById('rs_script').value) + '&input=' + encodeURIComponent(document.getElementById('input').value);
+    out.innerHTML = 'http://kirbyfan64.github.io/rs/index.html?script=' + encodeURIComponent(document.getElementById('script').value) + '&input=' + encodeURIComponent(document.getElementById('input').value);
 }

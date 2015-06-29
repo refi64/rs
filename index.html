@@ -8,22 +8,27 @@
     <div id="tdiv">
       <h1><a href="https://github.com/kirbyfan64/rs">rs</a> demo page</h1>
       <br/>
-      <em>(Work-in-progress, if you can't tell by the "Run it!" button being
-          too far to the right)</em>
+      <em>(Work-in-progress!)</em>
       <br/>
       <br/>
       <br/>
       <div id="status"></div>
     </div>
     <div id="bdiv">
-      <textarea id="rs_script" placeholder="Enter your rs script here"></textarea>
-      <span id="output">Output will be here</span>
-      <textarea id="input" placeholder="Input text here"></textarea>
-      <input type="checkbox" id="debug">Debug?</input>
-      <br/>
-      <br/>
-      <button id="run" onclick="run_code()">Run it!</button>
-      <button id="link" onclick="make_link()">Link it!</button>
+      <div id="col1">
+        <textarea id="script" placeholder="Enter your rs script here"></textarea>
+        <textarea id="input" placeholder="Input text here"></textarea>
+      </div>
+      <div id="col2">
+        <span id="output">Output will be here</span>
+        <div id="buttons">
+          <button id="run" onclick="run_code()">Run it!</button>
+          <button id="link" onclick="make_link()">Link it!</button>
+        </div>
+      </div>
+      <div id="col3">
+        <input type="checkbox" id="debug">Debug?</input>
+      </div>
     </div>
     <script src="js/pypy.js/lib/Promise.min.js" charset="utf-8"></script>
     <script src="js/pypy.js/lib/FunctionPromise.js" charset="utf-8"></script>
