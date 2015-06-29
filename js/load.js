@@ -11,19 +11,19 @@ run_code = (function() {
     }
 
     var rsu = 'https://api.github.com/repos/kirbyfan64/rs/contents/rs.py';
-    var status = document.getElementById('status');
-    var out = document.getElementById('output');
+    var status = $('#status');
+    var out = $('#output');
     window.vm = new PyPyJS();
-    vm.stdout = vm.stderr = function(data) { output.innerHTML += escape(data); }
-    status.innerHTML = 'Loading PyPy.js (this might take a while)...'
+    vm.stdout = vm.stderr = function(data) { out.html(out.html() + escape(data)); }
+    status.text('Loading PyPy.js (this might take a while)...');
     vm.ready.then(function() {
-        status.innerHTML = 'Loading rs...';
+        status.text('Loading rs...');
         rs_req.open('GET', rsu, true);
         rs_req.setRequestHeader('Accept', 'application/vnd.github.v3.raw+json');
         rs_req.send();
     }).then(null, function(err) {
-        status.innerHTML = 'ERROR loading PyPy.js: ' + err;
-        status.style.color = 'red';
+        status.text('ERROR loading PyPy.js: ' + err);
+        status.css('color', 'red');
     })
 
     var url_query = window.location.href.split('?')[1];
@@ -35,10 +35,10 @@ run_code = (function() {
             var sides = query_args[i].split('=');
             switch (sides[0]) {
             case 'script':
-                document.getElementById('script').value = decodeURIComponent(sides[1]);
+                $('script').text(decodeURIComponent(sides[1]));
                 break;
             case 'input':
-                document.getElementById('input').value = decodeURIComponent(sides[1]);
+                $('input').text(decodeURIComponent(sides[1]));
                 break;
             }
         }
@@ -50,9 +50,9 @@ run_code = (function() {
     var string_req = new XMLHttpRequest();
     rs_req.onload = (function() {
         rs = this.responseText;
-        if (rs === undefined) status.innerHTML = 'ERROR loading rs!';
+        if (rs === undefined) status.text('ERROR loading rs!');
         else {
-            status.innerHTML = '';
+            status.html('<br/>');
             rs = rs.replace('from __future__ import print_function', '');
             vm.exec('from __future__ import print_function\n__name__=None\n' + rs);
         }
@@ -60,10 +60,10 @@ run_code = (function() {
 
     function on_error(err) {
         if (err.trace !== undefined)
-            output.innerHTML += escape(err.trace);
+            out.html(out.html() + escape(err.trace));
         else
-            output.innerHTML += 'INTERNAL ERROR: ' + err.toString();
-        output.style.color = 'red';
+            out.html(out.html() + 'INTERNAL ERROR: ' + err.toString());
+        out.css('color', 'red');
         if (err.trace === undefined) throw err;
     }
 
@@ -74,24 +74,23 @@ run_code = (function() {
     function run_code() {
         var largs = '';
         var lines = [];
-        output.style.color = 'black';
-        output.innerHTML = '';
-        lines = document.getElementById('script').value.split(/(?:\n)+/g);
-        if (document.getElementById('debug').checked)
+        out.css('color', 'black');
+        out.html('');
+        lines = $('#script').val().split(/(?:\n)+/g);
+        if ($('#debug').prop('checked'))
             largs += "'-g', ";
-        for (var i=0; i<lines.length; i++) if (lines[i] != '')
-            largs += "r'" + py_escape(lines[i]) + "', ";
+        largs += lines.filter(function(line){ return line != ''; }).reduce(function(a,b){ return a + "r'" + py_escape(b) + "', "; }, '');
         function on_stdin_ready() {
             vm.exec("from __future__ import print_function; import sys; sys.argv = ['rs.py', " + largs + "]\nmain()").then(null, on_error);
         }
-        vm.exec("import sys, cStringIO; sys.stdin = cStringIO.StringIO('" + py_escape(document.getElementById('input').value).replace(/^\\n+|\\n+$/g, '') + "\\n')").then(on_stdin_ready).then(null, on_error);
+        vm.exec("import sys, cStringIO; sys.stdin = cStringIO.StringIO('" + py_escape($('#input').val()).replace(/^\\n+|\\n+$/g, '') + "\\n')").then(on_stdin_ready).then(null, on_error);
     }
 
     return run_code;
 })();
 
 function make_link() {
-    var out = document.getElementById('output');
-    out.style.color = 'black';
-    out.innerHTML = 'http://kirbyfan64.github.io/rs/index.html?script=' + encodeURIComponent(document.getElementById('script').value) + '&input=' + encodeURIComponent(document.getElementById('input').value);
+    var out = $('#output');
+    out.css('color', 'black');
+    out.html('http://kirbyfan64.github.io/rs/index.html?script=' + encodeURIComponent($('#script').val()) + '&input=' + encodeURIComponent($('#input').val()));
 }
