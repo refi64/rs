@@ -39,6 +39,8 @@ button {
 button:hover { background: royalblue; }
 button:active { background: skyblue; }
 button:focus { outline: 0; }
+/* remove ugly outline in Firefox */
+button::-moz-focus-inner { border: none; }
 
 #buttons {
     margin-left: 1em;
