@@ -22,6 +22,7 @@ textarea {
     width: 100%;
     height: 23em;
     resize: none;
+    white-space: nowrap;
 }
 
 textarea:focus { outline: 0; }
