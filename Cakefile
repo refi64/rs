@@ -8,4 +8,7 @@ run = (cmd) ->
   pipe.stderr.on 'data', (data) -> process.stderr.write data.toString()
   pipe.stdout.on 'data', (data) -> print data.toString()
 
-task 'build', 'build load.js', -> run 'coffee -o js -c src/load.coffee'
+coffee = (args='') -> run "coffee #{args} -o js -c src/load.coffee"
+
+task 'build', 'build load.js', -> coffee()
+task 'watch', 'watch load.coffee and rebuild', -> coffee '-w'
