@@ -95,7 +95,7 @@
       return "" + a + "r'" + (py_escape(b)) + "', ";
     }), '');
     on_stdin_ready = function() {
-      return vm.exec("from __future__ import print_function\nimport sys\n\nsys.argv = ['rs.py', " + largs + "]\nmain()").then(null, on_error);
+      return vm.exec("from __future__ import print_function\nimport sys\n\nsys.argv = ['rs.py', '', " + largs + "]\nmain()").then(null, on_error);
     };
     vm.exec("import sys, cStringIO\nsys.stdin = cStringIO.StringIO('" + (py_escape($('#input').val().replace(/^\\n+|\\n+$/g, ''))) + "\\n')").then(on_stdin_ready).then(null, on_error);
     return run_code;

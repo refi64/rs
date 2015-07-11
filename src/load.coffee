@@ -72,7 +72,7 @@ this.run_code = () ->
         from __future__ import print_function
         import sys
 
-        sys.argv = ['rs.py', #{largs}]
+        sys.argv = ['rs.py', '', #{largs}]
         main()
         """
       .then null, on_error
