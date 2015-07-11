@@ -8,7 +8,7 @@ rs is a project I created for two purposes:
 
 The result? A tool with lots of operators and a few fun ways of doing things. Regexes were never this cool. Ever.
 
-`Try it! <http://kirbyfan64.github.io/rs>`_
+`Try it! <http://kirbyfan64.github.io/rs>`_ The sources for the demo page are at the ``gh-pages`` branch. Feel free to open any issues with the page or rs itself on the `bug tracker <http://github/kirbyfan64/rs/issues>`_.
 
 Installation
 ************
