@@ -28,6 +28,7 @@ textarea:focus { outline: 0; }
 
 button {
     margin-top: 2em;
+    margin-bottom: 2em;
     background: mediumblue;
     border-radius: 10px;
     border: 0;
@@ -42,7 +43,7 @@ button:focus { outline: 0; }
 /* remove ugly outline in Firefox */
 button::-moz-focus-inner { border: none; }
 
-#buttons {
+#controls {
     text-align: center;
 }
 
@@ -81,8 +82,3 @@ button::-moz-focus-inner { border: none; }
     position: relative;
 }
 
-#col3 {
-    width: 10%;
-    float: left;
-    position: relative;
-}
