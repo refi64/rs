@@ -43,7 +43,6 @@ button:focus { outline: 0; }
 button::-moz-focus-inner { border: none; }
 
 #buttons {
-    margin-left: 1em;
     text-align: center;
 }
 
@@ -54,13 +53,8 @@ button::-moz-focus-inner { border: none; }
 }
 
 #output {
-    padding: 1em;
-    margin-left: 1em;
     border: 1px solid black;
-    border-radius: 10px;
     background-color: whitesmoke;
-    height: 17em;
-    display: block;
     font-family: "Lucida Console", monospace;
     overflow: auto;
     white-space: nowrap;
@@ -83,6 +77,7 @@ button::-moz-focus-inner { border: none; }
 #col2 {
     width: 40%;
     float: left;
+    margin-left: 1em;
     position: relative;
 }
 

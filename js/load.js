@@ -11,7 +11,7 @@
   escape = function(txt) {
     return txt.replace(/[&<>]g/, function(tag) {
       return tags[tag] || tag;
-    }).replace(/\n/g, '<br/>').replace(/[ ]/g, '&nbsp;');
+    }).replace(/\n/g, '&#10;').replace(/[ ]/g, '&nbsp;');
   };
 
   rsu = 'https://api.github.com/repos/kirbyfan64/rs/contents/rs.py';

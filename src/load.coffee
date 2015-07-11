@@ -5,8 +5,8 @@ tags =
 
 escape = (txt) ->
   txt
-    .replace /[&<>]g/, (tag) -> tags[tag] || tag
-    .replace /\n/g, '<br/>'
+    .replace /[&<>]g/, (tag) -> tags[tag] or tag
+    .replace /\n/g, '&#10;'
     .replace /[ ]/g, '&nbsp;'
 
 rsu = 'https://api.github.com/repos/kirbyfan64/rs/contents/rs.py'
