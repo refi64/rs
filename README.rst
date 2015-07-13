@@ -71,6 +71,13 @@ Prefixing a pattern with a ``+`` is the convergence operator; I got the feature 
 
 Prefixing a pattern with ``*`` makes the pattern case-insensitive.
 
+Prefixing a pattern with ``?`` adds a maximum number of substitutions to the pattern. Only up to that many substitutions will be preformed using that pattern on each line. If the maximum number is over 2 digits long, it *must* be surrounded by brackets. Example::
+   
+   echo aaa | rs.py '?1a/b'
+   # outputs 'baa'
+   echo aaaaaaaaaaaa | rs.py '?[11]a/b'
+   # outputs bbbbbbbbbbba
+
 Repetition
 **********
 

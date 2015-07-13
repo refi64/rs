@@ -19,23 +19,36 @@ rep = re.compile(r'(\([^\(\)]+\))\^\^(\([^\)]*\))')
 ln = re.compile(r'\(\^\^([^\(\)]*)\)')
 
 def get_delim(cmd, delim):
+    orig = cmd
     esc = False
     conv = False
     flags = 0
-    while cmd and cmd[0] in '+*':
-        if cmd.startswith('+'):
+    maxsub = 0
+    while cmd and cmd[0] in '+*?':
+        if cmd[0] == '+':
             cmd = cmd[1:]
             conv = True
-        elif cmd.startswith('*'):
+        elif cmd[0] == '*':
             cmd = cmd[1:]
             flags = re.IGNORECASE
+        elif cmd[0] == '?':
+            if cmd[1] == '[':
+                try:
+                    end = cmd.index(']')
+                except ValueError:
+                    sys.exit("command %s has '[' in ? but no ']'" % orig)
+                maxsub = int(cmd[2:end])
+                cmd = cmd[end+1:]
+            else:
+                maxsub = int(cmd[1])
+                cmd = cmd[2:]
     for i, c in enumerate(cmd):
         if esc: esc = False
         elif c == '\\': esc = True
         elif cmd.startswith(delim, i):
             pat = cmd[:i] if i > 0 else '$'
-            return pat, cmd[i+len(delim):], conv, flags
-    return '^', cmd, conv, flags
+            return pat, cmd[i+len(delim):], conv, flags, maxsub
+    return '^', cmd, conv, flags, maxsub
 
 def expand(debug, line):
     while True:
@@ -74,7 +87,7 @@ def run(delim, cmds, debug):
             if debug: print("setting macro '%s' to '%s'" % (cmd[2:i], cmd[i+1:]))
             macros[cmd[2:i]] = cmd[i+1:]
         else:
-            pat, repl, conv, flags = get_delim(cmd, delim)
+            pat, repl, conv, flags, maxsub = get_delim(cmd, delim)
             if debug:
                 print('got pattern %s' % pat)
                 print('got replacement %s' % repl)
@@ -85,20 +98,20 @@ def run(delim, cmds, debug):
                 print('substituting macros into pattern resulted in %s' % pat)
                 print('substituting macros into replacement resulted in %s' %
                       repl)
-            patterns.append((re.compile(pat, flags), repl, conv))
+            patterns.append((re.compile(pat, flags), repl, conv, maxsub))
 
     if debug: print('processing input!')
 
     for line in sys.stdin:
         line = line.rstrip('\n').replace('^^', r'^\^')
         if debug: print('current line: %s' % line)
-        for find, replace, conv in patterns:
+        for find, replace, conv, maxsub in patterns:
             if debug: print('applying pattern %s with replacement %s' % (
                                                         find.pattern, replace))
             if conv:
                 orig = line
                 while True:
-                    line = expand(debug, find.sub(replace, line))
+                    line = expand(debug, find.sub(replace, line, maxsub))
                     if line == orig: break
                     if debug:
                         print('converged %s to %s' % (
@@ -106,7 +119,7 @@ def run(delim, cmds, debug):
                                 line.encode('string-escape')))
                     orig = line
             else:
-                line = expand(debug, find.sub(replace, line))
+                line = expand(debug, find.sub(replace, line, maxsub))
             if debug:
                 print('result of application is %s' %
                         line.encode('string-escape'))
