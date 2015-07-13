@@ -22,12 +22,13 @@ def get_delim(cmd, delim):
     esc = False
     conv = False
     flags = 0
-    if cmd.startswith('+'):
-        cmd = cmd[1:]
-        conv = True
-    if cmd.startswith('*'):
-        cmd = cmd[1:]
-        flags = re.IGNORECASE
+    while cmd and cmd[0] in '+*':
+        if cmd.startswith('+'):
+            cmd = cmd[1:]
+            conv = True
+        elif cmd.startswith('*'):
+            cmd = cmd[1:]
+            flags = re.IGNORECASE
     for i, c in enumerate(cmd):
         if esc: esc = False
         elif c == '\\': esc = True
