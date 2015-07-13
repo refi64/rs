@@ -33,7 +33,8 @@ def get_delim(cmd, delim):
         if esc: esc = False
         elif c == '\\': esc = True
         elif cmd.startswith(delim, i):
-            return cmd[:i], cmd[i+len(delim):], conv, flags
+            pat = cmd[:i] if i > 0 else '$'
+            return pat, cmd[i+len(delim):], conv, flags
     return '^', cmd, conv, flags
 
 def expand(debug, line):
