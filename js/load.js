@@ -11,7 +11,7 @@
   escape = function(txt) {
     return txt.replace(/[&<>]g/, function(tag) {
       return tags[tag] || tag;
-    }).replace(/\n/g, '&#10;').replace(/[ ]/g, '&nbsp;');
+    }).replace(/\\n/g, '&#10;').replace(/[ ]/g, '&nbsp;');
   };
 
   rsu = 'https://api.github.com/repos/kirbyfan64/rs/contents/rs.py';
@@ -76,7 +76,7 @@
   };
 
   py_escape = function(txt) {
-    return txt.replace(/'/g, "\\'").replace(/\n/g, '\\n');
+    return txt.replace(/\\/g, '\\\\').replace(/\n/g, '\\\\n').replace(/'/g, "\\'");
   };
 
   this.run_code = function() {
@@ -97,7 +97,7 @@
     on_stdin_ready = function() {
       return vm.exec("from __future__ import print_function\nimport sys\n\nsys.argv = ['rs.py', '', " + largs + "]\nmain()").then(null, on_error);
     };
-    vm.exec("import sys, cStringIO\nsys.stdin = cStringIO.StringIO('" + (py_escape($('#input').val().replace(/^\\n+|\\n+$/g, ''))) + "\\n')").then(on_stdin_ready).then(null, on_error);
+    vm.exec("import sys, cStringIO\nsys.stdin = cStringIO.StringIO('" + (py_escape($('#input').val().replace(/^\\n+|\\n+$/g, ''), true)) + "\\n')").then(on_stdin_ready).then(null, on_error);
     return run_code;
   };
 

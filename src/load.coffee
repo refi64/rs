@@ -6,7 +6,7 @@ tags =
 escape = (txt) ->
   txt
     .replace /[&<>]g/, (tag) -> tags[tag] or tag
-    .replace /\n/g, '&#10;'
+    .replace /\\n/g, '&#10;'
     .replace /[ ]/g, '&nbsp;'
 
 rsu = 'https://api.github.com/repos/kirbyfan64/rs/contents/rs.py'
@@ -54,7 +54,8 @@ on_error = (err) ->
     else 'INTERNAL ERROR: ' + err.toString()
     throw err if not err.trace?
 
-py_escape = (txt) -> txt.replace(/'/g, "\\'").replace /\n/g, '\\n'
+py_escape = (txt) ->
+  txt.replace(/\\/g, '\\\\').replace(/\n/g, '\\\\n').replace(/'/g, "\\'")
 
 this.run_code = () ->
   largs = ''
@@ -80,7 +81,7 @@ this.run_code = () ->
   vm
     .exec """
       import sys, cStringIO
-      sys.stdin = cStringIO.StringIO('#{py_escape $('#input').val().replace(/^\\n+|\\n+$/g, '')}\\n')
+      sys.stdin = cStringIO.StringIO('#{py_escape $('#input').val().replace(/^\\n+|\\n+$/g, ''), true}\\n')
       """
     .then on_stdin_ready
     .then null, on_error
