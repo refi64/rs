@@ -12,10 +12,9 @@ escape = (txt) ->
 rsu = 'https://api.github.com/repos/kirbyfan64/rs/contents/rs.py'
 status = $ '#status'
 out = $ '#output'
-window.vm = new PyPyJS()
-vm.stdout = vm.stderr = (data) -> out.html out.html() + escape data
+pypyjs.stdout = pypyjs.stderr = (data) -> out.html out.html() + escape data
 status.text 'Loading PyPy.js (this might take a while)...'
-vm.ready
+pypyjs.ready()
   .then ->
     status.text 'Loading rs...'
     rs_req.open 'GET', rsu, true
@@ -40,7 +39,7 @@ rs_req.onload = () ->
   if (rs = this.responseText)?
     status.html '<br/>'
     rs = rs.replace 'from __future__ import print_function', ''
-    vm.exec """
+    pypyjs.exec """
     from __future__ import print_function
     __name__ = None
     #{rs}
@@ -67,7 +66,7 @@ this.run_code = () ->
     .filter (line) -> line != ''
     .reduce ((a,b) -> "#{a}r'#{py_escape(b)}', "), ''
   on_stdin_ready = () ->
-    vm
+    pypyjs
       .exec """
         from __future__ import print_function
         import sys
@@ -77,7 +76,7 @@ this.run_code = () ->
         """
       .then null, on_error
 
-  vm
+  pypyjs
     .exec """
       import sys, cStringIO
       sys.stdin = cStringIO.StringIO('#{py_escape $('#input').val().replace(/^\\n+|\\n+$/g, '')}\\n')

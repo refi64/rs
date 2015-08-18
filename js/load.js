@@ -20,15 +20,13 @@
 
   out = $('#output');
 
-  window.vm = new PyPyJS();
-
-  vm.stdout = vm.stderr = function(data) {
+  pypyjs.stdout = pypyjs.stderr = function(data) {
     return out.html(out.html() + escape(data));
   };
 
   status.text('Loading PyPy.js (this might take a while)...');
 
-  vm.ready.then(function() {
+  pypyjs.ready().then(function() {
     status.text('Loading rs...');
     rs_req.open('GET', rsu, true);
     rs_req.setRequestHeader('Accept', 'application/vnd.github.v3.raw+json');
@@ -62,7 +60,7 @@
     if ((rs = this.responseText) != null) {
       status.html('<br/>');
       rs = rs.replace('from __future__ import print_function', '');
-      return vm.exec("from __future__ import print_function\n__name__ = None\n" + rs);
+      return pypyjs.exec("from __future__ import print_function\n__name__ = None\n" + rs);
     } else {
       return status.text('ERROR loading rs!');
     }
@@ -95,9 +93,9 @@
       return "" + a + "r'" + (py_escape(b)) + "', ";
     }), '');
     on_stdin_ready = function() {
-      return vm.exec("from __future__ import print_function\nimport sys\n\nsys.argv = ['rs.py', '', " + largs + "]\nmain()").then(null, on_error);
+      return pypyjs.exec("from __future__ import print_function\nimport sys\n\nsys.argv = ['rs.py', '', " + largs + "]\nmain()").then(null, on_error);
     };
-    vm.exec("import sys, cStringIO\nsys.stdin = cStringIO.StringIO('" + (py_escape($('#input').val().replace(/^\\n+|\\n+$/g, ''))) + "\\n')").then(on_stdin_ready).then(null, on_error);
+    pypyjs.exec("import sys, cStringIO\nsys.stdin = cStringIO.StringIO('" + (py_escape($('#input').val().replace(/^\\n+|\\n+$/g, ''))) + "\\n')").then(on_stdin_ready).then(null, on_error);
     return run_code;
   };
 
