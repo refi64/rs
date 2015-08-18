@@ -9,6 +9,12 @@ escape = (txt) ->
     .replace /\n/g, '&#10;'
     .replace /[ ]/g, '&nbsp;'
 
+uescape = (txt) ->
+  encodeURIComponent(txt)
+    .replace /[ ]/g, '%20'
+    .replace /\(/g, '%28'
+    .replace /\)/g, '%29'
+
 rsu = 'https://api.github.com/repos/kirbyfan64/rs/contents/rs.py'
 status = $ '#status'
 out = $ '#output'
@@ -91,5 +97,5 @@ this.make_link = () ->
   out.css 'color', 'black'
   out.html "
   http://kirbyfan64.github.io/rs/index.html?\
-  script=#{encodeURIComponent $('#script').val()}\
-  &input=#{encodeURIComponent $('#input') .val()}"
+  script=#{uescape $('#script').val()}\
+  &input=#{uescape $('#input') .val()}"
