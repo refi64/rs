@@ -108,6 +108,12 @@
       "greenlet", 
       "stackless"
     ], 
+    "_curses_cffi.ffi": [
+      "_curses"
+    ], 
+    "_curses_cffi.lib": [
+      "_curses"
+    ], 
     "_dummy_threading.*": [
       "dummy_threading"
     ], 
@@ -116,6 +122,12 @@
     ], 
     "_emx_link.link": [
       "os"
+    ], 
+    "_gdbm_cffi.ffi": [
+      "gdbm"
+    ], 
+    "_gdbm_cffi.lib": [
+      "gdbm"
     ], 
     "_heapq.*": [
       "heapq"
@@ -133,14 +145,34 @@
       "cProfile", 
       "test.test_cprofile"
     ], 
+    "_pwdgrp_cffi.ffi": [
+      "grp", 
+      "pwd"
+    ], 
+    "_pwdgrp_cffi.lib": [
+      "grp", 
+      "pwd"
+    ], 
     "_pyrepl_utils.disp_str": [
       "pyrepl.reader"
     ], 
     "_pyrepl_utils.init_unctrl_map": [
       "pyrepl.reader"
     ], 
+    "_sqlite3_cffi.ffi": [
+      "_sqlite3"
+    ], 
+    "_sqlite3_cffi.lib": [
+      "_sqlite3"
+    ], 
     "_sysconfigdata.build_time_vars": [
       "distutils.sysconfig_cpython"
+    ], 
+    "_syslog_cffi.ffi": [
+      "syslog"
+    ], 
+    "_syslog_cffi.lib": [
+      "syslog"
     ], 
     "_xmlplus": [
       "xml.__init__"
@@ -303,6 +335,9 @@
     "ossaudiodev.AFMT_S16_NE": [
       "test.test_ossaudiodev"
     ], 
+    "pip": [
+      "ensurepip.__init__"
+    ], 
     "py": [
       "ctypes_config_cache.rebuild"
     ], 
@@ -399,23 +434,19 @@
     ], 
     "strop.lowercase": [
       "string", 
-      "stringold", 
-      "string"
+      "stringold"
     ], 
     "strop.maketrans": [
       "string", 
-      "stringold", 
-      "string"
+      "stringold"
     ], 
     "strop.uppercase": [
       "string", 
-      "stringold", 
-      "string"
+      "stringold"
     ], 
     "strop.whitespace": [
       "string", 
-      "stringold", 
-      "string"
+      "stringold"
     ], 
     "sub": [
       "test.test_importhooks"
@@ -472,9 +503,6 @@
     ], 
     "test_bug737473": [
       "test.test_traceback"
-    ], 
-    "test_ttk.support.get_tk_root": [
-      "test.test_ttk_guionly"
     ], 
     "test_zipped_doctest": [
       "test.test_zipimport_support"

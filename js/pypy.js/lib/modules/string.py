@@ -66,16 +66,17 @@ def maketrans(fromstr, tostr):
     must be of the same length.
 
     """
-    if len(fromstr) != len(tostr):
+    n = len(fromstr)
+    if n != len(tostr):
         raise ValueError, "maketrans arguments must have same length"
-    global _idmapL
-    if not _idmapL:
-        _idmapL = list(_idmap)
-    L = _idmapL[:]
-    fromstr = map(ord, fromstr)
-    for i in range(len(fromstr)):
-        L[fromstr[i]] = tostr[i]
-    return ''.join(L)
+    # this function has been rewritten to suit PyPy better; it is
+    # almost 10x faster than the original.
+    buf = bytearray(256)
+    for i in range(256):
+        buf[i] = i
+    for i in range(n):
+        buf[ord(fromstr[i])] = tostr[i]
+    return str(buf)
 
 
 
@@ -182,24 +183,18 @@ class Template:
             mapping = args[0]
         # Helper function for .sub()
         def convert(mo):
-            named = mo.group('named')
+            named = mo.group('named') or mo.group('braced')
             if named is not None:
                 try:
                     # We use this idiom instead of str() because the latter
                     # will fail if val is a Unicode containing non-ASCII
                     return '%s' % (mapping[named],)
                 except KeyError:
-                    return self.delimiter + named
-            braced = mo.group('braced')
-            if braced is not None:
-                try:
-                    return '%s' % (mapping[braced],)
-                except KeyError:
-                    return self.delimiter + '{' + braced + '}'
+                    return mo.group()
             if mo.group('escaped') is not None:
                 return self.delimiter
             if mo.group('invalid') is not None:
-                return self.delimiter
+                return mo.group()
             raise ValueError('Unrecognized named group in pattern',
                              self.pattern)
         return self.pattern.sub(convert, self.template)
