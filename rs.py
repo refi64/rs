@@ -76,6 +76,7 @@ def run(delim, cmds, debug):
     patterns = []
     macros = {}
     for cmd in cmds:
+        if cmd.startswith('\\#'): continue
         if debug: print('reading command %s' % cmd)
         if cmd.startswith('$$'):
             if string is None:
@@ -159,7 +160,7 @@ def main():
             with open(fn, 'r') as f:
                 for line in f:
                     line = line.rstrip('\n')
-                    if not line or line.startswith('\\#'): continue
+                    if not line: continue
                     cmds.append(line)
     run(delim, cmds, debug)
 
