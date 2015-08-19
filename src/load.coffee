@@ -28,6 +28,22 @@ status = $ '#status'
 out = $ '#output'
 pypyjs.stdout = pypyjs.stderr = (data) -> out.html out.html() + escape data
 status.text 'Loading PyPy.js (this might take a while)...'
+
+rs = null
+rs_req = new XMLHttpRequest()
+string = null
+string_req = new XMLHttpRequest()
+rs_req.onload = () ->
+  if (rs = this.responseText)?
+    status.html '<br/>'
+    rs = rs.replace 'from __future__ import print_function', ''
+    pypyjs.exec """
+    from __future__ import print_function
+    __name__ = None
+    #{rs}
+    """
+  else status.text 'ERROR loading rs!'
+
 pypyjs.ready()
   .then ->
     status.text 'Loading rs...'
@@ -44,21 +60,6 @@ if (query = window.location.href.split('?')[1])?
   for arg in query_args
     [key, val] = arg.split '='
     $("##{key}").text decodeURIComponent val
-
-rs = null
-rs_req = new XMLHttpRequest()
-string = null
-string_req = new XMLHttpRequest()
-rs_req.onload = () ->
-  if (rs = this.responseText)?
-    status.html '<br/>'
-    rs = rs.replace 'from __future__ import print_function', ''
-    pypyjs.exec """
-    from __future__ import print_function
-    __name__ = None
-    #{rs}
-    """
-  else status.text 'ERROR loading rs!'
 
 on_error = (err) ->
   out.html out.html() +

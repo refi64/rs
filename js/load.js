@@ -34,6 +34,24 @@
 
   status.text('Loading PyPy.js (this might take a while)...');
 
+  rs = null;
+
+  rs_req = new XMLHttpRequest();
+
+  string = null;
+
+  string_req = new XMLHttpRequest();
+
+  rs_req.onload = function() {
+    if ((rs = this.responseText) != null) {
+      status.html('<br/>');
+      rs = rs.replace('from __future__ import print_function', '');
+      return pypyjs.exec("from __future__ import print_function\n__name__ = None\n" + rs);
+    } else {
+      return status.text('ERROR loading rs!');
+    }
+  };
+
   pypyjs.ready().then(function() {
     status.text('Loading rs...');
     rs_req.open('GET', rsu, true);
@@ -55,24 +73,6 @@
       $("#" + key).text(decodeURIComponent(val));
     }
   }
-
-  rs = null;
-
-  rs_req = new XMLHttpRequest();
-
-  string = null;
-
-  string_req = new XMLHttpRequest();
-
-  rs_req.onload = function() {
-    if ((rs = this.responseText) != null) {
-      status.html('<br/>');
-      rs = rs.replace('from __future__ import print_function', '');
-      return pypyjs.exec("from __future__ import print_function\n__name__ = None\n" + rs);
-    } else {
-      return status.text('ERROR loading rs!');
-    }
-  };
 
   on_error = function(err) {
     out.html(out.html() + (err.trace != null ? escape(err.trace) : 'INTERNAL ERROR: ' + err.toString()));
