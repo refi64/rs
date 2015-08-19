@@ -18,6 +18,10 @@
     return encodeURIComponent(txt).replace(/[ ]/g, '%20').replace(/\(/g, '%28').replace(/\)/g, '%29');
   };
 
+  py_escape = function(txt) {
+    return txt.replace(/'/g, "\\'").replace(/\n/g, '\\n').replace(new RegExp(String.fromCharCode(160), 'g'), ' ');
+  };
+
   rsu = 'https://api.github.com/repos/kirbyfan64/rs/contents/rs.py';
 
   status = $('#status');
@@ -75,10 +79,6 @@
     if (err.trace == null) {
       throw err;
     }
-  };
-
-  py_escape = function(txt) {
-    return txt.replace(/'/g, "\\'").replace(/\n/g, '\\n');
   };
 
   this.run_code = function() {

@@ -15,6 +15,14 @@ uescape = (txt) ->
     .replace /\(/g, '%28'
     .replace /\)/g, '%29'
 
+py_escape = (txt) ->
+  txt
+    .replace /'/g, "\\'"
+    .replace /\n/g, '\\n'
+    # Stupid non-breaking spaces that display incorrectly with monospace fonts...
+    # (see issue #2)
+    .replace new RegExp(String.fromCharCode(160), 'g'), ' '
+
 rsu = 'https://api.github.com/repos/kirbyfan64/rs/contents/rs.py'
 status = $ '#status'
 out = $ '#output'
@@ -58,8 +66,6 @@ on_error = (err) ->
       escape err.trace
     else 'INTERNAL ERROR: ' + err.toString()
     throw err if not err.trace?
-
-py_escape = (txt) -> txt.replace(/'/g, "\\'").replace /\n/g, '\\n'
 
 this.run_code = () ->
   largs = ''
