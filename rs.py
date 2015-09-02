@@ -65,7 +65,7 @@ def expand(debug, line):
             if debug: print('no more repititions to expand')
             break
         l, r = m.group(1), m.group(2)
-        if debug: print('found repition %s^^%s' % (l, r))
+        if debug: print('found repition %s^^%s' % (l.encode('string-escape'), r))
         l = l[1:-1]
         line = line[:m.start()] + l*int(r[1:-1]) + line[m.end():]
         if debug: print('result with repitition expanded: %s' %
