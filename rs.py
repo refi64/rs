@@ -46,9 +46,12 @@ def get_delim(cmd, delim):
         if esc: esc = False
         elif c == '\\': esc = True
         elif cmd.startswith(delim, i):
-            pat = cmd[:i] if i > 0 else '$'
-            return pat, cmd[i+len(delim):], conv, flags, maxsub
-    return '^', cmd, conv, flags, maxsub
+            pat = cmd[:i]
+            if pat == '$': return cmd[i+len(delim):], '', conv, flags, 0, True
+            elif not pat: pat = '$'
+            return pat, cmd[i+len(delim):], conv, flags, maxsub, False
+    return '^', cmd, conv, flags, maxsub, False
+
 
 def expand(debug, line):
     while True:
@@ -88,7 +91,7 @@ def run(delim, cmds, debug):
             if debug: print("setting macro '%s' to '%s'" % (cmd[2:i], cmd[i+1:]))
             macros[cmd[2:i]] = cmd[i+1:]
         else:
-            pat, repl, conv, flags, maxsub = get_delim(cmd, delim)
+            pat, repl, conv, flags, maxsub, count = get_delim(cmd, delim)
             if debug:
                 print('got pattern %s' % pat)
                 print('got replacement %s' % repl)
@@ -99,20 +102,23 @@ def run(delim, cmds, debug):
                 print('substituting macros into pattern resulted in %s' % pat)
                 print('substituting macros into replacement resulted in %s' %
                       repl)
-            patterns.append((re.compile(pat, flags), repl, conv, maxsub))
+            patterns.append((re.compile(pat, flags), repl, conv, maxsub, count))
 
     if debug: print('processing input!')
 
     for line in sys.stdin:
         line = line.rstrip('\n').replace('^^', r'^\^')
         if debug: print('current line: %s' % line)
-        for find, replace, conv, maxsub in patterns:
+        for find, replace, conv, maxsub, count in patterns:
             if debug: print('applying pattern %s with replacement %s' % (
                                                         find.pattern, replace))
             if conv:
                 orig = line
                 while True:
-                    line = expand(debug, find.sub(replace, line, maxsub))
+                    if count:
+                        line = expand(debug, find.sub(replace, line, maxsub))
+                    else:
+                        line = str(len(find.findall(line)))
                     if line == orig: break
                     if debug:
                         print('converged %s to %s' % (
@@ -120,7 +126,10 @@ def run(delim, cmds, debug):
                                 line.encode('string-escape')))
                     orig = line
             else:
-                line = expand(debug, find.sub(replace, line, maxsub))
+                if count:
+                    line = str(len(find.findall(line)))
+                else:
+                    line = expand(debug, find.sub(replace, line, maxsub))
             if debug:
                 print('result of application is %s' %
                         line.encode('string-escape'))

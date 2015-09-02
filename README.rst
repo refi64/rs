@@ -107,6 +107,14 @@ Any lines beginning with a double dollar sign (``$$``) will be assumed to be mac
 
 will replace a ``1`` with a ``2``.
 
+Matches
+*******
+
+If the pattern is just a dollar sign `$$`, then the substitution is used as the
+pattern, and the result is the number of matches. For example::
+   
+   echo 1a1b1 | rs.py '$/1.' # prints 2, because the pattern 1. matches twice
+
 TODO
 ****
 
