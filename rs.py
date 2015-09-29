@@ -116,9 +116,9 @@ def run(delim, cmds, debug):
                 orig = line
                 while True:
                     if count:
-                        line = expand(debug, find.sub(replace, line, maxsub))
-                    else:
                         line = str(len(find.findall(line)))
+                    else:
+                        line = expand(debug, find.sub(replace, line, maxsub))
                     if line == orig: break
                     if debug:
                         print('converged %s to %s' % (
